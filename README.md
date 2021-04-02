@@ -4,11 +4,16 @@
 
 # a.- Análisis en profundidad del rendimiento de David Warner (bateador australiano)
 
-
-
 1. [Obtener los datos de DA Warner ](#schema1)
 2. [Obtener los valores de los bateos](#schema2)
 3. [Obtener los valores de los batsman runs para buscar cual es el que más hace](#schema3)
+
+# b.- Analizar cada equipo
+4. [Obtenemos los nombre de los equipos y los sustituimos por la abreviaturas.](#schema4)
+5. [Distribución de puntos para equipos por entradas](#schema5)
+
+# c.-cuántas veces los equipos marcan más de 200
+
 <hr>
 
 <a name="schema1"></a>
@@ -72,24 +77,77 @@ plt.savefig("./images/runs_port.png")
 ~~~
 ![img](./images/runs_port.png)
 
+<hr>
+
+<a name="schema4"></a>
+
+# 4. Obtenemos los nombre de los equipos y los sustituimos por la abreviaturas.
+Creamos un diccionario con los nombres de los equipos y las abreviaturas y mapeamos cada columna donde esten los equipos
+~~~python
+Teams={
+    'Royal Challengers Bangalore':'RCB', 
+    'Sunrisers Hyderabad':'SRH',
+       'Rising Pune Supergiant':'RPS',
+    'Mumbai Indians':'MI',
+       'Kolkata Knight Riders':'KKR', 
+    'Gujarat Lions':'GL',
+    'Kings XI Punjab':'KXIP',
+       'Delhi Daredevils':'DD',
+    'Chennai Super Kings':'CSK',
+    'Rajasthan Royals':'RR',
+       'Deccan Chargers':'DC',
+    'Kochi Tuskers Kerala':'KTK',
+    'Pune Warriors':'PW',
+       'Rising Pune Supergiants':'RPS'
+}
+df['batting_team'] = df['batting_team'].map(Teams)
+df['bowling_team'] = df['bowling_team'].map(Teams)
+~~~
+![img](./images/003.png)
 
 
+<hr>
+
+<a name="schema5"></a>
+
+# 5 Distribución de puntos para equipos por entradas
+
+~~~python
+runs=df.groupby(['match_id','inning','batting_team'])[['total_runs']].sum().reset_index()
+runs.drop('match_id',axis=1,inplace=True)
+~~~
+![img](./images/004.png)
+
+~~~python
+inning1 = runs[runs['inning'] == 1]
+inning2 = runs[runs['inning'] == 2]
+~~~
+![img](./images/inni1.png)
+![img](./images/inni2.png)
 
 
+<hr>
 
+<a name="schema6"></a>
 
+# 6. Creamos el dataframe con los valores que vamos a usar.
+~~~python
+score = df.groupby(['match_id','inning','batting_team','bowling_team'])[['total_runs']].sum().reset_index()
+~~~
+![img](./images/005.png)
 
+<hr>
 
+<a name="schema7"></a>
 
+# 7. Creamos un data donde los valores de `total_runs >200'
+~~~python
+score_200 = score[score['total_runs']>=200]
+sns.countplot(score_200['batting_team'])
 
-
-
-
-
-
-
-
-
+~~~
+![img](./images/score_batting_200.png)
+![img](./images/score_bowling_200.png)
 
 
 
