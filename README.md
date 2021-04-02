@@ -13,6 +13,8 @@
 5. [Distribución de puntos para equipos por entradas](#schema5)
 
 # c.-cuántas veces los equipos marcan más de 200
+6. [Creamos el dataframe con los valores que vamos a usar.](#schema6)
+7. [Creamos un data donde los valores de `total_runs >200'](#schema7)
 
 <hr>
 
@@ -122,8 +124,8 @@ runs.drop('match_id',axis=1,inplace=True)
 inning1 = runs[runs['inning'] == 1]
 inning2 = runs[runs['inning'] == 2]
 ~~~
-![img](./images/inni1.png)
-![img](./images/inni2.png)
+![img](./images/inn1.png)
+![img](./images/inn2.png)
 
 
 <hr>
