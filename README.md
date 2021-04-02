@@ -7,7 +7,8 @@
 
 
 1. [Obtener los datos de DA Warner ](#schema1)
-
+2. [Obtener los valores de los bateos](#schema2)
+3. [Obtener los valores de los batsman runs para buscar cual es el que más hace](#schema3)
 <hr>
 
 <a name="schema1"></a>
