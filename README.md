@@ -14,7 +14,7 @@
 
 # c.-cuántas veces los equipos marcan más de 200
 6. [Creamos el dataframe con los valores que vamos a usar.](#schema6)
-7. [Creamos un data donde los valores de `total_runs >200'](#schema7)
+7. [Creamos un data donde los valores de `total_runs >200`](#schema7)
 
 <hr>
 
