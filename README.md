@@ -16,6 +16,13 @@
 6. [Creamos el dataframe con los valores que vamos a usar.](#schema6)
 7. [Creamos un data donde los valores de `total_runs >200`](#schema7)
 
+# d.- Comparación de bateador
+
+8. [Creamos los dataframe  que necesitamos](#schema8)
+9. [btener el máximo de runs de cada bateador](#schema9)
+10. [Mejores puntuaciones individuales cada bateador](#schema10)
+
+
 <hr>
 
 <a name="schema1"></a>
@@ -150,6 +157,122 @@ sns.countplot(score_200['batting_team'])
 ~~~
 ![img](./images/score_batting_200.png)
 ![img](./images/score_bowling_200.png)
+
+
+<hr>
+
+<a name="schema8"></a>
+
+# 8. Creamos los dataframe  que necesitamos
+Primero los bateadores con los golpes a las bolas
+~~~python
+balls = df.groupby(['batsman'])['ball'].count().reset_index()
+~~~
+![img](./images/006.png)
+
+Segundo  data con los bateadores y la veces que hacen runs
+~~~python
+runs=df.groupby(['batsman'])['batsman_runs'].sum().reset_index()
+runs.columns=['batsman','runs']
+~~~
+![img](./images/007.png)
+
+
+Tercero data con los `batsman runs = 4`
+~~~python
+four = df[df['batsman_runs'] == 4]
+~~~
+![img](./images/008.png)
+
+~~~python
+runs_4 = four.groupby('batsman')['batsman_runs'].count().reset_index()
+runs_4.columns=['batsman','4s']
+~~~
+![img](./images/009.png)
+
+Lo mismo para `batsman runs = 6`
+~~~python
+six=df.groupby('batsman')['batsman_runs'].agg(lambda x: (x==6).sum()).reset_index()
+six.columns=['batsman','6s']
+~~~
+![img](./images/010.png)
+
+Creamos el dataframe con los datos de casa jugador
+~~~python
+player = pd.concat([runs,balls.iloc[:,1],runs_4.iloc[:,1], six.iloc[:,1]],axis = 1)
+~~~
+![img](./images/011.png)
+
+Rellenemos con `0` los valores nulos
+~~~python
+player.fillna(0, inplace = True)
+~~~
+![img](./images/012.png)
+
+Añadimos una columnda de `strike_rate`
+~~~python
+player['strike_rate']=(player['runs']/player['ball'])*100
+~~~
+![img](./images/013.png)
+
+
+<hr>
+
+<a name="schema9"></a>
+
+# 9. Obtener el máximo de runs de cada bateador
+~~~python
+grp=df.groupby(['match_id','batsman','batting_team'])['batsman_runs'].sum().reset_index()
+max_runs = grp.groupby('batsman')['batsman_runs'].max().reset_index()
+max_runs.columns = ['batsman', 'max_runs']
+max_runs
+~~~ 
+![img](./images/014.png)
+
+
+Concatenamos los dos dataframe
+
+~~~python
+player_max = pd.concat([player, max_runs.iloc[:,1]], axis = 1)
+player_max
+~~~
+
+![img](./images/015.png)
+
+Obtener el top 10 de los bateadores
+~~~python
+sum_runs = df.groupby('batsman')['batsman_runs'].sum()
+sum_runs.sort_values(ascending=False)[:10].plot(kind = 'bar')
+
+~~~
+![img](./images/top_ten.png)
+
+
+<hr>
+
+<a name="schema10"></a>
+
+# 10. Mejores puntuaciones individuales cada bateador
+~~~python
+player_sort = df.groupby(['match_id','batsman','batting_team'])['batsman_runs'].sum().reset_index().sort_values(by = 'batsman_runs',ascending = False)
+player_sort.head(10)
+~~~
+![img](./images/016.png)
+
+Crear data con los golpes
+
+~~~python
+dimissal_kinds = ['caught', 'bowled', 'run out', 'lbw', 'caught and bowled','stumped',' it wicket']
+hwt = df[df['dismissal_kind'].isin(dimissal_kinds)]
+hwt.head()
+~~~
+![img](./images/017.png)
+
+~~~python
+hwt['bowler'].value_counts()[:10].plot(kind = 'bar')
+plt.savefig("./images/bowler_10.png")
+~~~
+![img](./images/bowler_10.png)
 
 
 
