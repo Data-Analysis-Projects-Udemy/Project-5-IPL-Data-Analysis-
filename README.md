@@ -22,18 +22,6 @@ deliveries.ipynb
 9. [btener el máximo de runs de cada bateador](#schema9)
 10. [Mejores puntuaciones individuales cada bateador](#schema10)
 
-# e.- Algunos análisis básicos
-IPL_matches.ipynb
-11. [Cargamos los datos y obtenemos los nulos](#schema11)
-12. [Algunos análisis básicos](#schema12)
-
-
-
-
-
-
-
-
 
 <hr>
 
