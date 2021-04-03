@@ -1,6 +1,6 @@
 # Project 5 IPL Data Analysis
 ### IPL = Indian Premier League
-
+deliveries.ipynb
 
 # a.- Análisis en profundidad del rendimiento de David Warner (bateador australiano)
 
@@ -21,6 +21,18 @@
 8. [Creamos los dataframe  que necesitamos](#schema8)
 9. [btener el máximo de runs de cada bateador](#schema9)
 10. [Mejores puntuaciones individuales cada bateador](#schema10)
+
+# e.- Algunos análisis básicos
+IPL_matches.ipynb
+11. [Cargamos los datos y obtenemos los nulos](#schema11)
+12. [Algunos análisis básicos](#schema12)
+
+
+
+
+
+
+
 
 
 <hr>
@@ -273,6 +285,68 @@ hwt['bowler'].value_counts()[:10].plot(kind = 'bar')
 plt.savefig("./images/bowler_10.png")
 ~~~
 ![img](./images/bowler_10.png)
+
+<hr>
+
+<a name="schema11"></a>
+
+# 11. Cargamos los datos y obtenemos los nulos
+
+~~~python
+df=pd.read_csv('./data/matches.csv')
+df.isnull().sum()
+df.drop(['umpire3'], axis = 1, inplace = True)
+~~~
+![img](./images/018.png)
+
+Cambiamos lo nombres de los equipos por abreviaturas
+~~~python
+Teams={
+    'Royal Challengers Bangalore':'RCB', 
+    'Sunrisers Hyderabad':'SRH',
+       'Rising Pune Supergiant':'RPS',
+    'Mumbai Indians':'MI',
+       'Kolkata Knight Riders':'KKR', 
+    'Gujarat Lions':'GL',
+    'Kings XI Punjab':'KXIP',
+       'Delhi Daredevils':'DD',
+    'Chennai Super Kings':'CSK',
+    'Rajasthan Royals':'RR',
+       'Deccan Chargers':'DC',
+    'Kochi Tuskers Kerala':'KTK',
+    'Pune Warriors':'PW',
+       'Rising Pune Supergiants':'RPS'
+}
+df['team1'] = df['team1'].map(Teams)
+df['team2'] = df['team2'].map(Teams)
+~~~
+![img](./images/019.png)
+
+<hr>
+
+<a name="schema12"></a>
+
+# 12. Algunos análisis básicos
+
+La mayoría de los premios al hombre del partido
+~~~python
+df['player_of_match'].value_counts()
+~~~
+![img](./images/020.png)
+
+Ganancia máxima por carreras
+~~~python
+df[df['win_by_runs']==df['win_by_runs'].max()]
+~~~
+![img](./images/021.png)
+Mumbai Indians (MI) derrotó a Delhi Daredevils (DD) con la mayor diferencia de carreras
+
+Mayores victorias por ventanillas
+~~~python
+df[df['win_by_wickets']==df['win_by_wickets'].max()]
+~~~
+![img](./images/022.png)
+
 
 
 
